@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+#main {
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid white;
+}
+
+#add-project {
+  width: 20%;
+  font-size: 1.5em;
+  border-radius: 50px;
+  margin: 0 auto;
+}
+
+.project {
+  background-color: orange;
+  color: white;
+  text-align: center;
+}
+
+.add-button, .remove-project {
+  width: 20%;
+  font-size: 1.5em;
+  border-radius: 20px;
+  line-height: 1.5em;
+  background-color: #34eb37;
+  color: white;
+  margin: 5px;
+}
+
+.remove-project {
+  background-color: red;
+}

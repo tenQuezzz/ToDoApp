@@ -10,32 +10,59 @@ export function createAppUI(app) {
       'display': 'flex',
       'flex-flow': 'row wrap'
     });
-  for (let project of app.projects) {
-    appContainer.appendChild(createProjectContainer(project));
-  }
+
+  let addProjectButton = createElement('button', 'Create project', { "id": "add-project" });
+  addProjectButton.addEventListener('click', () => {
+    do {
+      var title = prompt('Title: ');
+    } while (!app.createNewProject(title));
+    updateAppProjects(app, appContainer);
+  });
+
+  parent.appendChild(addProjectButton);
+  updateAppProjects(app, appContainer);
   parent.appendChild(appContainer);
 }
 
-function createProjectContainer(project) {
+function createProjectContainer(app, project) {
   let projectContainer = createElement('div', '', {
-    'id': project.title
+    'id': project.title,
+    'class': 'project'
     },
     {
       'width': '30%',
       'margin': '10px auto',
-      'border': '1px solid black',
       'border-radius': '15px'
     });
-  updateProjectContainer(projectContainer, project);
+  projectContainer.appendChild(createElement('h2', project.title, {}, {
+    'text-align': 'center'
+  }));
+
+  let removeButton = createElement('button', '-', { 'class': 'remove-project' });
+  removeButton.addEventListener('click', () => {
+    app.deleteProject(project.title);
+    updateAppProjects(app, document.getElementById('app-container'));
+  });
+
+  let notesContainer = createElement('div', '', { 'class': 'notes' });
+  projectContainer.appendChild(removeButton);
+  projectContainer.appendChild(notesContainer);
+  updateProjectContainer(notesContainer, project);
   return projectContainer;
+}
+
+function updateAppProjects(app, appContainer) {
+  let oldProjects = appContainer.querySelectorAll('.project');
+  oldProjects.forEach(node => appContainer.removeChild(node));
+
+  for (let project of app.projects) {
+    appContainer.appendChild(createProjectContainer(app, project));
+  }
 }
 
 function updateProjectContainer(container, project) {
   container.textContent = '';
-  container.appendChild(createElement('h2', project.title, {}, {
-    'text-align': 'center'
-  }));
-  let addButton = createElement('button', 'add');
+  let addButton = createElement('button', '+', {'class': 'add-button'});
   addButton.addEventListener('click', e => {
     addNewToDoItem(project);
   });
@@ -43,7 +70,7 @@ function updateProjectContainer(container, project) {
 
   for (let item of project.items) {
     let toDoItem = createToDoItem(item);
-    let removeButton = createElement('button', 'remove');
+    let removeButton = createElement('button', 'remove', {'class': 'remove-button'});
     removeButton.addEventListener('click', e => {
       project.removeItem(item.id);
       removeItemFromProject(project, item.id);
@@ -56,24 +83,25 @@ function updateProjectContainer(container, project) {
 function createToDoItem(item) {
   let itemContainer = createElement('div', '',
     {
-      'item-id': item.id
+      'item-id': item.id,
+      'class': 'toDoItem'
     },
     {
       'width': '90%',
       'margin': '10px auto',
       'padding': '10px',
-      'border': '1px solid black',
-      'border-radius': '15px'
+      'border-radius': '15px',
+      'background-color': getColorDependsOnPriority(item.priority)
     });
   itemContainer.appendChild(createElement('p', item.title, {},
     {
       'width': '100%',
       'margin': '0 auto',
-      'font-weight': 'bold'
+      'font-weight': 'bold',
+      'border-bottom': '1px solid white'
     }));
   itemContainer.appendChild(createElement('p', item.description));
   itemContainer.appendChild(createElement('p', item.dueDate));
-  itemContainer.appendChild(createElement('p', item.priority));
   return itemContainer;
 }
 
@@ -84,7 +112,7 @@ function removeItemFromProject(project, item_id) {
 }
 
 function addNewToDoItem(project) {
-  const container = document.getElementById(project.title);
+  const container = document.getElementById(project.title).querySelector('.notes');
   let title = prompt('Title: ');
   let description = prompt('Description: ');
   let dueDate = prompt('Due date (dd-mm-yyyy): ');
@@ -104,4 +132,14 @@ function createElement(tagName, content, attributes = {}, styles = {}) {
   });
   element.textContent = content;
   return element;
+}
+
+function getColorDependsOnPriority(priority) {
+  if (priority === 'important') {
+    return 'tomato';
+  } else if (priority === 'medium') {
+    return 'dodgerblue';
+  } else {
+    return 'green';
+  }
 }
