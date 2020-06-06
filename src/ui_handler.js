@@ -11,7 +11,7 @@ export function createAppUI(app) {
       'flex-flow': 'row wrap'
     });
 
-  let addProjectButton = createElement('button', 'Create project', { "id": "add-project" });
+  const addProjectButton = createElement('button', 'Create project', { "id": "add-project" });
   addProjectButton.addEventListener('click', () => {
     do {
       var title = prompt('Title: ');
@@ -25,7 +25,7 @@ export function createAppUI(app) {
 }
 
 function createProjectContainer(app, project) {
-  let projectContainer = createElement('div', '', {
+  const projectContainer = createElement('div', '', {
     'id': project.title,
     'class': 'project'
     },
@@ -38,17 +38,17 @@ function createProjectContainer(app, project) {
     'text-align': 'center'
   }));
 
-  let addButton = createElement('button', '+', { 'class': 'add-button' });
+  const addButton = createElement('button', '+', { 'class': 'add-button' });
   addButton.addEventListener('click', e => {
     addNewToDoItemToProject(project);
   });
 
-  let notesContainer = createElement('div', '', { 'class': 'notes' });
+  const notesContainer = createElement('div', '', { 'class': 'notes' });
   projectContainer.appendChild(addButton);
   projectContainer.appendChild(notesContainer);
   updatedNotesFromProject(notesContainer, project);
 
-  let removeButton = createElement('button', 'remove project', { 'class': 'remove-project' });
+  const removeButton = createElement('button', 'remove project', { 'class': 'remove-project' });
   removeButton.addEventListener('click', () => {
     app.deleteProject(project.title);
     updateProjects(app, document.getElementById('app-container'));
@@ -58,7 +58,7 @@ function createProjectContainer(app, project) {
 }
 
 function updateProjects(app, appContainer) {
-  let oldProjects = appContainer.querySelectorAll('.project');
+  const oldProjects = appContainer.querySelectorAll('.project');
   oldProjects.forEach(node => appContainer.removeChild(node));
 
   for (let project of app.projects) {
@@ -69,8 +69,8 @@ function updateProjects(app, appContainer) {
 function updatedNotesFromProject(notesContainer, project) {
   notesContainer.textContent = '';
   for (let item of project.items) {
-    let toDoItem = createToDoItem(item);
-    let removeButton = createElement('button', 'remove', {'class': 'remove-button'});
+    const toDoItem = createToDoItem(item);
+    const removeButton = createElement('button', 'remove', {'class': 'remove-button'});
     removeButton.addEventListener('click', e => {
       project.removeItem(item.id);
       removeToDoItemFromProject(project, item.id);
@@ -81,7 +81,7 @@ function updatedNotesFromProject(notesContainer, project) {
 }
 
 function createToDoItem(item) {
-  let itemContainer = createElement('div', '',
+  const itemContainer = createElement('div', '',
     {
       'item-id': item.id,
       'class': 'toDoItem'
@@ -107,16 +107,16 @@ function createToDoItem(item) {
 
 function removeToDoItemFromProject(project, item_id) {
   const container = document.getElementById(project.title).querySelector('.notes');
-  let itemToDelete = container.querySelector(`[item-id="${item_id}"]`);
+  const itemToDelete = container.querySelector(`[item-id="${item_id}"]`);
   container.removeChild(itemToDelete);
 }
 
 function addNewToDoItemToProject(project) {
   const container = document.getElementById(project.title).querySelector('.notes');
-  let title = prompt('Title: ');
-  let description = prompt('Description: ');
-  let dueDate = prompt('Due date (dd-mm-yyyy): ');
-  let priority = prompt('Priority(importan/medium/plain): ');
+  const title = prompt('Title: ');
+  const description = prompt('Description: ');
+  const dueDate = prompt('Due date (dd-mm-yyyy): ');
+  const priority = prompt('Priority(importan/medium/plain): ');
   project.createItem(title, description, dueDate, priority);
   updatedNotesFromProject(container, project);
 }
