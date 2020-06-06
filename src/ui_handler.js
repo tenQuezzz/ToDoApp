@@ -16,11 +16,11 @@ export function createAppUI(app) {
     do {
       var title = prompt('Title: ');
     } while (!app.createNewProject(title));
-    updateAppProjects(app, appContainer);
+    updateProjects(app, appContainer);
   });
 
   parent.appendChild(addProjectButton);
-  updateAppProjects(app, appContainer);
+  updateProjects(app, appContainer);
   parent.appendChild(appContainer);
 }
 
@@ -38,20 +38,26 @@ function createProjectContainer(app, project) {
     'text-align': 'center'
   }));
 
-  let removeButton = createElement('button', '-', { 'class': 'remove-project' });
+  let removeButton = createElement('button', 'remove project', { 'class': 'remove-project' });
   removeButton.addEventListener('click', () => {
     app.deleteProject(project.title);
-    updateAppProjects(app, document.getElementById('app-container'));
+    updateProjects(app, document.getElementById('app-container'));
+  });
+
+  let addButton = createElement('button', '+', { 'class': 'add-button' });
+  addButton.addEventListener('click', e => {
+    addNewToDoItemToProject(project);
   });
 
   let notesContainer = createElement('div', '', { 'class': 'notes' });
   projectContainer.appendChild(removeButton);
+  projectContainer.appendChild(addButton);
   projectContainer.appendChild(notesContainer);
-  updateProjectContainer(notesContainer, project);
+  updatedNotesFromProject(notesContainer, project);
   return projectContainer;
 }
 
-function updateAppProjects(app, appContainer) {
+function updateProjects(app, appContainer) {
   let oldProjects = appContainer.querySelectorAll('.project');
   oldProjects.forEach(node => appContainer.removeChild(node));
 
@@ -60,23 +66,17 @@ function updateAppProjects(app, appContainer) {
   }
 }
 
-function updateProjectContainer(container, project) {
-  container.textContent = '';
-  let addButton = createElement('button', '+', {'class': 'add-button'});
-  addButton.addEventListener('click', e => {
-    addNewToDoItem(project);
-  });
-  container.appendChild(addButton);
-
+function updatedNotesFromProject(notesContainer, project) {
+  notesContainer.textContent = '';
   for (let item of project.items) {
     let toDoItem = createToDoItem(item);
     let removeButton = createElement('button', 'remove', {'class': 'remove-button'});
     removeButton.addEventListener('click', e => {
       project.removeItem(item.id);
-      removeItemFromProject(project, item.id);
+      removeToDoItemFromProject(project, item.id);
     })
     toDoItem.appendChild(removeButton);
-    container.appendChild(toDoItem);
+    notesContainer.appendChild(toDoItem);
   }
 }
 
@@ -105,22 +105,21 @@ function createToDoItem(item) {
   return itemContainer;
 }
 
-function removeItemFromProject(project, item_id) {
+function removeToDoItemFromProject(project, item_id) {
   const container = document.getElementById(project.title);
   let itemToDelete = container.querySelector(`[item-id="${item_id}"]`);
   container.removeChild(itemToDelete);
 }
 
-function addNewToDoItem(project) {
+function addNewToDoItemToProject(project) {
   const container = document.getElementById(project.title).querySelector('.notes');
   let title = prompt('Title: ');
   let description = prompt('Description: ');
   let dueDate = prompt('Due date (dd-mm-yyyy): ');
   let priority = prompt('Priority(importan/medium/plain): ');
   project.createItem(title, description, dueDate, priority);
-  updateProjectContainer(container, project);
+  updatedNotesFromProject(container, project);
 }
-
 
 function createElement(tagName, content, attributes = {}, styles = {}) {
   const element = document.createElement(tagName);
