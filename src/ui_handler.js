@@ -38,7 +38,6 @@ function createProjectContainer(app, project) {
     'text-align': 'center'
   }));
 
-
   let addButton = createElement('button', '+', { 'class': 'add-button' });
   addButton.addEventListener('click', e => {
     addNewToDoItemToProject(project);
@@ -107,7 +106,7 @@ function createToDoItem(item) {
 }
 
 function removeToDoItemFromProject(project, item_id) {
-  const container = document.getElementById(project.title);
+  const container = document.getElementById(project.title).querySelector('.notes');
   let itemToDelete = container.querySelector(`[item-id="${item_id}"]`);
   container.removeChild(itemToDelete);
 }
@@ -135,11 +134,7 @@ function createElement(tagName, content, attributes = {}, styles = {}) {
 }
 
 function getColorDependsOnPriority(priority) {
-  if (priority === 'important') {
-    return 'tomato';
-  } else if (priority === 'medium') {
-    return 'dodgerblue';
-  } else {
-    return 'green';
-  }
+  if (priority === 'important') return 'tomato';
+  else if (priority === 'medium') return 'dodgerblue';
+  else return 'green';
 }
