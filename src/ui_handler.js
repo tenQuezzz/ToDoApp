@@ -38,11 +38,6 @@ function createProjectContainer(app, project) {
     'text-align': 'center'
   }));
 
-  let removeButton = createElement('button', 'remove project', { 'class': 'remove-project' });
-  removeButton.addEventListener('click', () => {
-    app.deleteProject(project.title);
-    updateProjects(app, document.getElementById('app-container'));
-  });
 
   let addButton = createElement('button', '+', { 'class': 'add-button' });
   addButton.addEventListener('click', e => {
@@ -50,10 +45,16 @@ function createProjectContainer(app, project) {
   });
 
   let notesContainer = createElement('div', '', { 'class': 'notes' });
-  projectContainer.appendChild(removeButton);
   projectContainer.appendChild(addButton);
   projectContainer.appendChild(notesContainer);
   updatedNotesFromProject(notesContainer, project);
+
+  let removeButton = createElement('button', 'remove project', { 'class': 'remove-project' });
+  removeButton.addEventListener('click', () => {
+    app.deleteProject(project.title);
+    updateProjects(app, document.getElementById('app-container'));
+  });
+  projectContainer.appendChild(removeButton)
   return projectContainer;
 }
 
