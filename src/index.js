@@ -1,9 +1,6 @@
 import { ToDoItem } from './item'
-// import { Project } from './project'
 import { ToDoApp } from './app'
 import { createAppUI } from './ui_handler'
-
-// r(id, title, description, dueDate, priority)
 
 let app = new ToDoApp();
 app.deleteProject('Default project');
