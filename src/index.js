@@ -37,4 +37,16 @@ app.createNewProject('Another project #2', [
   new ToDoItem('#3', 'third item', 'just for test', 'no', 'important'),
 ]);
 
+app.createNewProject('Another project #3', [
+  new ToDoItem('#1', 'first item', 'just for test', 'no', 'important'),
+  new ToDoItem('#2', 'second item', 'just for test', 'no', 'important'),
+  new ToDoItem('#3', 'third item', 'just for test', 'no', 'important'),
+]);
+
+app.createNewProject('Test project #3', [
+  new ToDoItem('#1', 'first item', 'just for test', 'no', 'important'),
+  new ToDoItem('#2', 'second item', 'just for test', 'no', 'important'),
+  new ToDoItem('#3', 'third item', 'just for test', 'no', 'important'),
+]);
+
 createAppUI(app);
